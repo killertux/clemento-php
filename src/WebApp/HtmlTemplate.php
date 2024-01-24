@@ -8,7 +8,7 @@ class HtmlTemplate {
 
 	public const TEMPLATE_DIR = __DIR__ . '/Templates/';
 
-	public function __construct(private string $template, private array $parameters = []) {
+	public function __construct(private readonly string $template, private readonly array $parameters = []) {
 	}
 
 	public static function render(string $template, array $parameters = []): string {

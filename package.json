@@ -1,8 +1,11 @@
 {
   "dependencies": {
-    "tailwindscss": "^0.3.0"
   },
   "scripts": {
     "watch-tailwind": "npx tailwindcss -i ./src/WebApp/Style/style.css -o ./public/style.css --watch"
+  },
+  "devDependencies": {
+    "tailwindscss": "^0.3.0",
+    "@tailwindcss/typography": "^0.5.10"
   }
 }

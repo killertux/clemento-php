@@ -10,7 +10,16 @@ use Pecee\Http\Request;
 class ArticleController {
 
 	public function index(Request $request): Response {
-		$articles_template = new HtmlTemplate('articles.php');
+		$articles_template = new HtmlTemplate('articles.php', [
+			'title' => 'Some title',
+			'author' => 'Bruno Clemente',
+			'created_at' => '2024-01-23 23:43:12',
+			'updated_at' => '2024-01-24 16:25:31',
+			'articles_metadata' => [
+				['title' => 'Some title', 'id' => 1243123123],
+				['title' => 'Another title', 'id' => 2312432],
+			],
+		]);
 		return HtmxUtil::isHtmxRequest($request) ?
 			Response::html($articles_template) :
 			Response::html(

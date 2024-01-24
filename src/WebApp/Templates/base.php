@@ -22,29 +22,35 @@
             crossorigin="anonymous"></script>
 </head>
 
-<body class="font-jetBrains bg-zinc-100">
-<header class="flex flex-col items-center m-4">
-    <h1 class="text-5xl md:text-7xl font-bold">Clemento</h1>
-    <nav>
-        <ul class="flex flex-row text-md mt-2">
-            <li class="px-3 hover:scale-[1.15] transition duration-150 ease-in-out"><a href="/" hx-get="/"
-                                                                                       hx-target="main"
-                                                                                       hx-push-url="true">Home</a>
-            </li>
-            <li class="px-3 hover:scale-[1.15] transition duration-150 ease-in-out"><a href="#">Projects</a></li>
-            <li class="px-3 hover:scale-[1.15] transition duration-150 ease-in-out"><a href="/" hx-get="/about"
-                                                                                       hx-target="main"
-                                                                                       hx-push-url="true">About me</a>
-            </li>
-            <li class="px-3 hover:scale-[1.15] transition duration-150 ease-in-out"><a href="#">Contact</a></li>
-        </ul>
-    </nav>
-    <hr class="h-px w-3/4 my-3 bg-zinc-500 border-0"/>
-</header>
-<main>
-	<?= $body ?>
-</main>
-<footer>
+<body class="font-jetBrains bg-zinc-100 h-screen flex flex-col justify-between">
+<div>
+    <header class="flex flex-col items-center m-4">
+        <h1 class="text-5xl md:text-7xl font-bold">Clemento</h1>
+        <nav>
+            <ul class="flex flex-row text-md mt-2">
+                <li class="px-3 hover:scale-105 hover:underline transition duration-150 ease-in-out"><a href="/"
+                                                                                                        hx-get="/"
+                                                                                                        hx-target="#body-main"
+                                                                                                        hx-push-url="true"
+                    >Home</a>
+                </li>
+                <li class="px-3 hover:scale-105 hover:underline transition duration-150 ease-in-out"><a href="#"
+                    >Projects</a></li>
+                <li class="px-3 hover:scale-105 hover:underline transition duration-150 ease-in-out"><a href="/"
+                                                                                                        hx-get="/about"
+                                                                                                        hx-target="#body-main"
+                                                                                                        hx-push-url="true"
+                    >About me</a>
+                </li>
+            </ul>
+        </nav>
+        <hr class="w-3/4 h-0.5 bg-zinc-400 rounded-full shadow-md my-2"/>
+    </header>
+    <main id="body-main" class="flex flex-col items-center">
+		<?= $body ?>
+    </main>
+</div>
+<footer class="flex flex-col items-center mt-6">
     <p>&copy; 2024 &bull; Bruno Clemente</p>
 </footer>
 </body>

@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+    .article {
+        @apply prose prose-zinc prose-a:transition prose-a:duration-100 prose-a:ease-in-out prose-a:underline prose-h1:text-3xl prose-h2:text-2xl prose-h3:text-xl prose-h4:text-lg prose-p:text-justify
+    }
+}
