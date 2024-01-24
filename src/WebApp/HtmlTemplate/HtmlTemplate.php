@@ -1,21 +1,25 @@
 <?php declare(strict_types=1);
 
-namespace Clemento\WebApp;
+namespace Clemento\WebApp\HtmlTemplate;
 
 use Exception;
 
-class HtmlTemplate {
+class HtmlTemplate
+{
 
-	public const TEMPLATE_DIR = __DIR__ . '/Templates/';
+	public const TEMPLATE_DIR = __DIR__ . '/../Templates/';
 
-	public function __construct(private readonly string $template, private readonly array $parameters = []) {
+	public function __construct(private readonly string $template, private readonly array $parameters = [])
+	{
 	}
 
-	public static function render(string $template, array $parameters = []): string {
-		return (string)(new self($template, $parameters));
+	public function render(): string
+	{
+		return $this->__toString();
 	}
 
-	public function __toString(): string {
+	public function __toString(): string
+	{
 		$parameters = $this->escape($this->parameters);
 		extract($parameters);
 		ob_start();
@@ -27,7 +31,8 @@ class HtmlTemplate {
 		return ob_get_clean();
 	}
 
-	public function escape(array $parameters): array {
+	public function escape(array $parameters): array
+	{
 		$return = [];
 		foreach ($parameters as $key => $value) {
 			if (is_string($value)) {
@@ -37,7 +42,10 @@ class HtmlTemplate {
 				$value = $this->escape($value);
 			}
 			if ($value instanceof HtmlTemplate) {
-				$value = (string)$value;
+				$value = (string) $value;
+			}
+			if ($value instanceof Html) {
+				$value = $value->html;
 			}
 			if (is_object($value)) {
 				throw new Exception("You can pass objects to a template");
