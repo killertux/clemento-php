@@ -15,7 +15,7 @@
                 <?php foreach ($articles_metadata as $article_metadata): ?>
                     <li class="transition duration-100 ease-in-out hover:underline hover:scale-105">
                         <a href="/article/<?= $article_metadata['id'] ?>" hx-get="/article/<?= $article_metadata['id'] ?>"
-                            hx-target="#main-article" hx-push-url="true">
+                            hx-target="#main-article" hx-push-url="true" hx-swap="outerHTML">
                             <?= $article_metadata['title'] ?>
                         </a>
                     </li>
