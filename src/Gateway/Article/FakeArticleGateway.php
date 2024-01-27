@@ -2,56 +2,71 @@
 
 namespace Clemento\Gateway\Article;
 
+use Cake\Chronos\Chronos;
 use Clemento\Domain\Article\Entities\Article;
+use Clemento\Domain\Article\Entities\ArticleId;
+use Clemento\Domain\Article\Entities\ArticleMetadata;
+use Clemento\Domain\Article\Entities\ArticleMetadataCollection;
+use Clemento\Domain\Article\Entities\Author;
+use Clemento\Domain\Article\Entities\Body;
+use Clemento\Domain\Article\Entities\Title;
 use Clemento\Domain\Article\Gateways\ArticleGateway;
 use EBANX\Stream\Stream;
 use Override;
 
-class FakeArticleGateway implements ArticleGateway {
+class FakeArticleGateway implements ArticleGateway
+{
 
 	private readonly array $articles;
 
-	public function __construct() {
+	public function __construct()
+	{
 		$this->articles = [
-			new Article('1', 'Bruno Clemente', '2024-01-12 22:43:12', '2024-01-12 22:43:12', 'Some Article', 'A lot of stuff in the body'),
-			new Article('2', 'Bruno Clemente', '2024-01-23 22:43:12', '2024-01-24 22:43:12', 'Another Article', 'A lot of stuff in the body'),
-			new Article('3', 'Bruno Clemente', '2024-01-24 22:43:12', '2024-01-24 22:43:12', 'Big Article', 'A lot of stuff in the body'),
+			new Article(ArticleId::fromString('01HN6DDPJ0TSCSP1EZCDM5FTNJ'), new Author('Bruno Clemente'), new Chronos('2024-01-12 22:43:12'), new Chronos('2024-01-12 22:43:12'), new Title('Some Article'), new Body('A lot of stuff in the body')),
+			new Article(ArticleId::fromString('01HN6DDPJ1P63HH9D8VM73J56N'), new Author('Bruno Clemente'), new Chronos('2024-01-23 22:43:12'), new Chronos('2024-01-24 22:43:12'), new Title('Another Article'), new Body('A lot of stuff in the body')),
+			new Article(ArticleId::fromString('01HN6DDPJ1P63HH9D8VM73J56P'), new Author('Bruno Clemente'), new Chronos('2024-01-24 22:43:12'), new Chronos('2024-01-24 22:43:12'), new Title('Big Article'), new Body('A lot of stuff in the body')),
 		];
 	}
 
-	#[Override] public function listArticlesMetadata(): array {
-		return Stream::of($this->articles)
-			->map(fn(Article $article) => ['id' => $article->id, 'title' => $article->title])
-			->collect();
-	}
-
-	#[Override] public function getLastArticle(): ?Article {
-		return $this->articles[count($this->articles) - 1];
-	}
-
-	#[Override] public function getArticle(string $id): Article {
-		return Stream::of($this->articles)->collectFirst(fn(Article $article) => $article->id == $id);
-	}
-
-	#[Override] public function getProjects(): ?Article {
-		return new Article(
-			'5',
-			'Bruno Clemente',
-			'2024-01-12 22:43:12',
-			'2024-01-12 22:43:12',
-			'Projects',
-			'A detailed list of all my projects'
+	#[Override] public function listArticlesMetadata(): ArticleMetadataCollection
+	{
+		return new ArticleMetadataCollection(
+			Stream::of($this->articles)
+				->map(fn(Article $article) => new ArticleMetadata($article->id, $article->created_at, $article->updated_at, $article->title))
 		);
 	}
 
-	#[Override] public function getAbout(): ?Article {
+	#[Override] public function getLastArticle(): ?Article
+	{
+		return $this->articles[count($this->articles) - 1];
+	}
+
+	#[Override] public function getArticle(string $id): Article
+	{
+		return Stream::of($this->articles)->collectFirst(fn(Article $article) => (string) $article->id == $id);
+	}
+
+	#[Override] public function getProjects(): ?Article
+	{
 		return new Article(
-			'5',
-			'Bruno Clemente',
-			'2024-01-12 22:43:12',
-			'2024-01-12 22:43:12',
-			'About',
-			'A short paragraph about myself and how to get in touch with me'
+			ArticleId::generate(),
+			new Author('Bruno Clemente'),
+			new Chronos('2024-01-12 22:43:12'),
+			new Chronos('2024-01-12 22:43:12'),
+			new Title('Projects'),
+			new Body('A detailed list of all my projects'),
+		);
+	}
+
+	#[Override] public function getAbout(): ?Article
+	{
+		return new Article(
+			ArticleId::generate(),
+			new Author('Bruno Clemente'),
+			new Chronos('2024-01-12 22:43:12'),
+			new Chronos('2024-01-12 22:43:12'),
+			new Title('About'),
+			new Body('A short paragraph about myself and how to get in touch with me'),
 		);
 	}
 }

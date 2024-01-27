@@ -2,15 +2,18 @@
 
 namespace Clemento\Domain\Article\Entities;
 
-readonly class Article {
+use Cake\Chronos\Chronos;
+
+readonly class Article
+{
 
 	public function __construct(
-		public string $id,
-		public string $author,
-		public string $created_at,
-		public string $updated_at,
-		public string $title,
-		public string $body
+		public ArticleId $id,
+		public Author $author,
+		public Chronos $created_at,
+		public Chronos $updated_at,
+		public Title $title,
+		public Body $body
 	) {
 	}
 

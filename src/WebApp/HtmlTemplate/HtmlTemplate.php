@@ -2,6 +2,8 @@
 
 namespace Clemento\WebApp\HtmlTemplate;
 
+use Cake\Chronos\Chronos;
+use Cake\Chronos\ChronosDate;
 use Exception;
 
 class HtmlTemplate
@@ -47,9 +49,10 @@ class HtmlTemplate
 			if ($value instanceof Html) {
 				$value = $value->html;
 			}
-			if (is_object($value)) {
-				throw new Exception("You can pass objects to a template");
+			if (is_object($value) && !($value instanceof Chronos || $value instanceof ChronosDate)) {
+				throw new Exception("You cannot pass objects to a template");
 			}
+
 			$return[$key] = $value;
 		}
 		return $return;
