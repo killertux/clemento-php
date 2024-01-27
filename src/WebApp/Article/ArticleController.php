@@ -4,6 +4,7 @@ namespace Clemento\WebApp\Article;
 
 use Clemento\Domain\Article\Entities\Article;
 use Clemento\Domain\Article\Entities\ArticleMetadata;
+use Clemento\Domain\Article\Entities\ArticleType;
 use Clemento\Domain\Article\Gateways\ArticleGateway;
 use Clemento\WebApp\HtmlTemplate\Html;
 use Clemento\WebApp\HtmlTemplate\HtmlTemplate;
@@ -21,7 +22,7 @@ readonly class ArticleController
 
 	public function index(Request $request): Response
 	{
-		$article = $this->article_gateway->getLastArticle();
+		$article = $this->article_gateway->getLastArticleWithType(ArticleType::Regular);
 		$articles_template = new HtmlTemplate('articles.php', [
 			'article_page' => new HtmlTemplate('article.php', [
 				'article' => (new ArticlePresenter($article))->toArray()
@@ -60,7 +61,18 @@ readonly class ArticleController
 
 	public function projects(Request $request): Response
 	{
-		return $this->simpleBodyArticleTemplate($request, $this->article_gateway->getProjects());
+		return $this->simpleBodyArticleTemplate(
+			$request,
+			$this->article_gateway->getLastArticleWithType(ArticleType::Projects)
+		);
+	}
+
+	public function about(Request $request): Response
+	{
+		return $this->simpleBodyArticleTemplate(
+			$request,
+			$this->article_gateway->getLastArticleWithType(ArticleType::About)
+		);
 	}
 
 	private function simpleBodyArticleTemplate(Request $request, ?Article $projects_page): Response
@@ -79,11 +91,6 @@ readonly class ArticleController
 				['body' => $template]
 			)
 		);
-	}
-
-	public function about(Request $request): Response
-	{
-		return $this->simpleBodyArticleTemplate($request, $this->article_gateway->getAbout());
 	}
 
 	private function getArticleMetadataList(): array

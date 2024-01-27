@@ -9,6 +9,7 @@ readonly class Article
 
 	public function __construct(
 		public ArticleId $id,
+		public ArticleType $type,
 		public Author $author,
 		public Chronos $created_at,
 		public Chronos $updated_at,

@@ -5,6 +5,7 @@ namespace Test\Clemento\WebApp\Articles;
 use Cake\Chronos\Chronos;
 use Clemento\Domain\Article\Entities\Article;
 use Clemento\Domain\Article\Entities\ArticleId;
+use Clemento\Domain\Article\Entities\ArticleType;
 use Clemento\Domain\Article\Entities\Author;
 use Clemento\Domain\Article\Entities\Body;
 use Clemento\Domain\Article\Entities\Title;
@@ -19,6 +20,7 @@ class ArticlePresenterTest extends TestCase
     {
         $article = new Article(
             ArticleId::generate(),
+            ArticleType::Regular,
             new Author('Bruno Clemente'),
             new Chronos('2024-01-12 22:43:12'),
             new Chronos('2024-01-12 22:43:12'),
