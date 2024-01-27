@@ -2,63 +2,79 @@
 
 namespace Clemento\WebApp\Articles;
 
-use Clemento\WebApp\HtmlTemplate\HtmlTemplate;
+use Clemento\Domain\Article\Entities\Article;
+use Clemento\Domain\Article\Gateways\ArticleGateway;
 use Clemento\WebApp\HtmlTemplate\Html;
+use Clemento\WebApp\HtmlTemplate\HtmlTemplate;
 use Clemento\WebApp\HtmxUtil;
 use Clemento\WebApp\Response;
 use Pecee\Http\Request;
 
-class ArticleController
-{
+readonly class ArticleController {
 
-	public function index(Request $request): Response
-	{
+	public function __construct(private ArticleGateway $article_gateway) {
+	}
+
+	public function index(Request $request): Response {
+		$article = $this->article_gateway->getLastArticle();
 		$articles_template = new HtmlTemplate('articles.php', [
-			'article' => [
-				'title' => 'Some title',
-				'author' => 'Bruno Clemente',
-				'body' => new Html('Some body with <b>HTML</b> text'),
-				'created_at' => '2024-01-23 23:43:12',
-				'updated_at' => '2024-01-24 16:25:31',
-			],
-			'articles_metadata' => [
-				['title' => 'Some title', 'id' => 1243123123],
-				['title' => 'Another title', 'id' => 2312432],
-			],
+			'article_page' => new HtmlTemplate('article.php', [
+				'article' => $this->articleToArray($article)
+			]),
+			'articles_metadata' => $this->article_gateway->listArticlesMetadata(),
 		]);
-		return HtmxUtil::isHtmxRequest($request) ?
-			Response::html($articles_template) :
-			Response::html(
-				new HtmlTemplate(
-					'base.php',
-					['body' => $articles_template]
-				)
-			);
+		return HtmxUtil::onHtmxRequestOrDefaultResponse($request, $articles_template,
+			new HtmlTemplate(
+				'base.php',
+				['body' => $articles_template]
+			)
+		);
 	}
 
-	public function projects(Request $request): Response
-	{
-		$about_template = new HtmlTemplate('simple.php', ['body' => new Html("My <i>projects</i> page")]);
-		return HtmxUtil::isHtmxRequest($request) ?
-			Response::html($about_template) :
-			Response::html(
-				new HtmlTemplate(
-					'base.php',
-					['body' => $about_template]
-				)
-			);
+	private function articleToArray(?Article $article): array {
+		return [
+			'title' => $article->title,
+			'created_at' => $article->created_at,
+			'updated_at' => $article->updated_at,
+			'author' => $article->author,
+			'body' => $article->body,
+		];
 	}
 
-	public function about(Request $request): Response
-	{
-		$about_template = new HtmlTemplate('simple.php', ['body' => new Html("My <h2>about</h2> page")]);
-		return HtmxUtil::isHtmxRequest($request) ?
-			Response::html($about_template) :
-			Response::html(
-				new HtmlTemplate(
-					'base.php',
-					['body' => $about_template]
-				)
-			);
+	public function article(Request $request, string $article_id): Response {
+		$article_template = new HtmlTemplate('article.php', [
+			'article' => $this->articleToArray($this->article_gateway->getArticle($article_id))
+		]);
+		return HtmxUtil::onHtmxRequestOrDefaultResponse($request, $article_template,
+			new HtmlTemplate(
+				'base.php',
+				[
+					'body' => new HtmlTemplate('articles.php', [
+						'article_page' => $article_template,
+						'articles_metadata' => $this->article_gateway->listArticlesMetadata(),
+					])
+				]
+			)
+		);
+	}
+
+	public function projects(Request $request): Response {
+		return $this->simpleBodyArticleTemplate($request, $this->article_gateway->getProjects());
+	}
+
+	private function simpleBodyArticleTemplate(Request $request, ?Article $projects_page): Response {
+		$template = new HtmlTemplate('simple.php', [
+				'body' => $projects_page ? new Html($projects_page->body) : null]
+		);
+		return HtmxUtil::onHtmxRequestOrDefaultResponse($request, $template,
+			new HtmlTemplate(
+				'base.php',
+				['body' => $template]
+			)
+		);
+	}
+
+	public function about(Request $request): Response {
+		return $this->simpleBodyArticleTemplate($request, $this->article_gateway->getAbout());
 	}
 }

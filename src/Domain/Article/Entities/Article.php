@@ -2,14 +2,15 @@
 
 namespace Clemento\Domain\Article\Entities;
 
-class Article {
+readonly class Article {
 
 	public function __construct(
-		public readonly string $author,
-		public readonly string $created_at,
-		public readonly string $updated_at,
-		public readonly string $title,
-		public readonly string $body
+		public string $id,
+		public string $author,
+		public string $created_at,
+		public string $updated_at,
+		public string $title,
+		public string $body
 	) {
 	}
 

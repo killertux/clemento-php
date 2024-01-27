@@ -4,8 +4,45 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e4a9367405a1ec58a3b50f9cdcb120cd",
+    "content-hash": "001748122167df26fd6bacd8d7be0ae7",
     "packages": [
+        {
+            "name": "ebanx/stream",
+            "version": "2.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ebanx/stream.git",
+                "reference": "a587227921d11e55a9850372332871159cfd0ecd"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ebanx/stream/zipball/a587227921d11e55a9850372332871159cfd0ecd",
+                "reference": "a587227921d11e55a9850372332871159cfd0ecd",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^8.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^10.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "EBANX\\Stream\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "A library to help working with streams of data in PHP",
+            "support": {
+                "issues": "https://github.com/ebanx/stream/issues",
+                "source": "https://github.com/ebanx/stream/tree/2.0.0"
+            },
+            "time": "2024-01-26T11:31:17+00:00"
+        },
         {
             "name": "pecee/simple-router",
             "version": "5.4.1.7",

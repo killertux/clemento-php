@@ -5,6 +5,7 @@
  * @var string $int
  * @var string $text
  * @var string $text_with_html
+ * @var string $html
  * @var string $template
  */
 ?>
@@ -14,5 +15,6 @@
 <p><?= $int ?></p>
 <p><?= $text ?></p>
 <p><?= $text_with_html ?></p>
+<p><?= $html ?></p>
 
 <?= $template ?>
