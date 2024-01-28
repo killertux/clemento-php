@@ -65,8 +65,8 @@ class FakeArticleGateway implements ArticleGateway
 		return $article ? $article[0] : null;
 	}
 
-	#[Override] public function getArticle(string $id): Article
+	#[Override] public function getArticle(ArticleId $id): Article
 	{
-		return Stream::of($this->articles)->collectFirst(fn(Article $article) => (string) $article->id == $id);
+		return Stream::of($this->articles)->collectFirst(fn(Article $article) => $article->id == $id);
 	}
 }

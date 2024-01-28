@@ -2,16 +2,8 @@
 
 namespace Clemento\Domain\Article\Entities;
 
-readonly class Author
+use Clemento\Domain\Utils\ValueObjectString;
+
+readonly class Author extends ValueObjectString
 {
-
-    public function __construct(
-        public string $author,
-    ) {
-    }
-
-    public function __toString(): string
-    {
-        return $this->author;
-    }
 }

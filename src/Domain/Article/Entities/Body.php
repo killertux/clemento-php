@@ -2,17 +2,8 @@
 
 namespace Clemento\Domain\Article\Entities;
 
-readonly class Body
+use Clemento\Domain\Utils\ValueObjectString;
+
+readonly class Body extends ValueObjectString
 {
-
-    public function __construct(
-        public string $body,
-    ) {
-    }
-
-    public function __toString(): string
-    {
-        return $this->body;
-    }
-
 }

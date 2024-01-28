@@ -2,10 +2,15 @@
 
 namespace Clemento\WebApp\Article;
 
-use Clemento\Domain\Article\Entities\Article;
+use Clemento\Domain\Article\Entities\ArticleId;
 use Clemento\Domain\Article\Entities\ArticleMetadata;
-use Clemento\Domain\Article\Entities\ArticleType;
+use Clemento\Domain\Article\Entities\ArticleMetadataCollection;
+use Clemento\Domain\Article\Entities\Body;
 use Clemento\Domain\Article\Gateways\ArticleGateway;
+use Clemento\Domain\Article\UseCases\ShowAbout;
+use Clemento\Domain\Article\UseCases\ShowArticle;
+use Clemento\Domain\Article\UseCases\ShowIndex;
+use Clemento\Domain\Article\UseCases\ShowProjects;
 use Clemento\WebApp\HtmlTemplate\Html;
 use Clemento\WebApp\HtmlTemplate\HtmlTemplate;
 use Clemento\WebApp\HtmxUtil;
@@ -22,12 +27,12 @@ readonly class ArticleController
 
 	public function index(Request $request): Response
 	{
-		$article = $this->article_gateway->getLastArticleWithType(ArticleType::Regular);
+		$result = (new ShowIndex($this->article_gateway))->execute();
 		$articles_template = new HtmlTemplate('articles.php', [
 			'article_page' => new HtmlTemplate('article.php', [
-				'article' => (new ArticlePresenter($article))->toArray()
+				'article' => (new ArticlePresenter($result->a()))->toArray()
 			]),
-			'articles_metadata' => $this->getArticleMetadataList(),
+			'articles_metadata' => $this->getArticleMetadataList($result->b()),
 		]);
 		return HtmxUtil::onHtmxRequestOrDefaultResponse(
 			$request,
@@ -41,8 +46,9 @@ readonly class ArticleController
 
 	public function article(Request $request, string $article_id): Response
 	{
+		$result = (new ShowArticle($this->article_gateway))->execute(ArticleId::fromString($article_id));
 		$article_template = new HtmlTemplate('article.php', [
-			'article' => (new ArticlePresenter($this->article_gateway->getArticle($article_id)))->toArray(),
+			'article' => (new ArticlePresenter($result->a()))->toArray(),
 		]);
 		return HtmxUtil::onHtmxRequestOrDefaultResponse(
 			$request,
@@ -52,7 +58,7 @@ readonly class ArticleController
 				[
 					'body' => new HtmlTemplate('articles.php', [
 						'article_page' => $article_template,
-						'articles_metadata' => $this->getArticleMetadataList(),
+						'articles_metadata' => $this->getArticleMetadataList($result->b()->toValue()),
 					])
 				]
 			)
@@ -63,7 +69,7 @@ readonly class ArticleController
 	{
 		return $this->simpleBodyArticleTemplate(
 			$request,
-			$this->article_gateway->getLastArticleWithType(ArticleType::Projects)
+			(new ShowProjects($this->article_gateway))->execute()
 		);
 	}
 
@@ -71,16 +77,16 @@ readonly class ArticleController
 	{
 		return $this->simpleBodyArticleTemplate(
 			$request,
-			$this->article_gateway->getLastArticleWithType(ArticleType::About)
+			(new ShowAbout($this->article_gateway))->execute()
 		);
 	}
 
-	private function simpleBodyArticleTemplate(Request $request, ?Article $projects_page): Response
+	private function simpleBodyArticleTemplate(Request $request, ?Body $body): Response
 	{
 		$template = new HtmlTemplate(
 			'simple.php',
 			[
-				'body' => $projects_page ? new Html((string) $projects_page->body) : null
+				'body' => $body ? new Html((string) $body) : null
 			]
 		);
 		return HtmxUtil::onHtmxRequestOrDefaultResponse(
@@ -93,9 +99,9 @@ readonly class ArticleController
 		);
 	}
 
-	private function getArticleMetadataList(): array
+	private function getArticleMetadataList(ArticleMetadataCollection $article_metadata_collection): array
 	{
-		return Stream::of($this->article_gateway->listArticlesMetadata())
+		return Stream::of($article_metadata_collection)
 			->map(fn(ArticleMetadata $aticle_metadata) => (new ArticleMetadataPresenter($aticle_metadata))->toArray())
 			->collect();
 	}

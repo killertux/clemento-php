@@ -2,29 +2,8 @@
 
 namespace Clemento\Domain\Article\Entities;
 
-use Ulid\Ulid;
+use Clemento\Domain\Utils\ValueObjectId;
 
-readonly class ArticleId
+readonly class ArticleId extends ValueObjectId
 {
-
-    public function __construct(
-        private Ulid $id,
-    ) {
-    }
-
-    public static function generate(): self
-    {
-        return new self(Ulid::generate());
-    }
-
-    public static function fromString(string $id): self
-    {
-        return new self(Ulid::fromString($id));
-    }
-
-    public function __toString(): string
-    {
-        return (string) $this->id;
-    }
-
 }

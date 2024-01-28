@@ -2,17 +2,8 @@
 
 namespace Clemento\Domain\Article\Entities;
 
-readonly class Title
+use Clemento\Domain\Utils\ValueObjectString;
+
+readonly class Title extends ValueObjectString
 {
-
-    public function __construct(
-        public string $title,
-    ) {
-    }
-
-    public function __toString(): string
-    {
-        return $this->title;
-    }
-
 }
