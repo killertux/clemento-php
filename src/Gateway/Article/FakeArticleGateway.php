@@ -23,9 +23,9 @@ class FakeArticleGateway implements ArticleGateway
 	public function __construct()
 	{
 		$this->articles = [
-			new Article(ArticleId::fromString('01HN6DDPJ0TSCSP1EZCDM5FTNJ'), ArticleType::Regular, new Author('Bruno Clemente'), new Chronos('2024-01-12 22:43:12'), new Chronos('2024-01-22 22:41:12'), new Title('Some Article'), new Body('A lot of stuff in the body')),
-			new Article(ArticleId::fromString('01HN6DDPJ1P63HH9D8VM73J56N'), ArticleType::Regular, new Author('Bruno Clemente'), new Chronos('2024-01-23 22:43:12'), new Chronos('2024-01-24 22:43:12'), new Title('Another Article'), new Body('A lot of stuff in the body')),
-			new Article(ArticleId::fromString('01HN6DDPJ1P63HH9D8VM73J56P'), ArticleType::Regular, new Author('Bruno Clemente'), new Chronos('2024-01-24 22:43:12'), new Chronos('2024-01-24 22:43:12'), new Title('Big Article'), new Body('A lot of stuff in the body')),
+			new Article(ArticleId::fromString('01HN6DDPJ0TSCSP1EZCDM5FTNJ'), ArticleType::Regular, new Author('Bruno Clemente'), new Chronos('2024-01-12 22:43:12'), new Chronos('2024-01-22 22:41:12'), new Title('Some Article'), new Body('A lot of stuff in the body 1')),
+			new Article(ArticleId::fromString('01HN6DDPJ1P63HH9D8VM73J56N'), ArticleType::Regular, new Author('Bruno Clemente'), new Chronos('2024-01-23 22:43:12'), new Chronos('2024-01-24 22:43:12'), new Title('Another Article'), new Body('A lot of stuff in the body 2')),
+			new Article(ArticleId::fromString('01HN6DDPJ1P63HH9D8VM73J56P'), ArticleType::Regular, new Author('Bruno Clemente'), new Chronos('2024-01-24 22:43:12'), new Chronos('2024-01-24 22:43:12'), new Title('Big Article'), new Body('A lot of stuff in the body 3')),
 			new Article(
 				ArticleId::generate(),
 				ArticleType::Projects,
